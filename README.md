@@ -1,9 +1,23 @@
-# Group SAS Project: SASit
+# SASit
 
-A small social media app that allows you to upload and interact with pictures and videos posted by people.
+A mindful social media app built with Flutter for sharing photo and video moments with friends.
 
-It has account registration, profiles, commenting on posts, tagging users, chatrooms and personal chats and sharing posts in chats.
+## Features
 
-there is a personal timer that the user can set to limit their usage so they can be more mindful of their time. When the time is up it tells the user they can either stop now or stop after viewing one last post in which case the app stops showing the feed and dsiplays a message saying you are done for today and enjoy time off phone.
+- Browse a social feed, like posts, comment, tag people, and search posts by people, places, or captions.
+- Create a post with a caption and tags, or share a post directly into a personal chat or group room.
+- Read and send messages in personal chats and group rooms.
+- Set a browsing timer. When it ends, choose to stop or see one last post before the feed closes for the day.
+- Choose between Terracotta, Lavender, and Midnight themes.
 
-there are alsop multpile themes.
+This repository contains a front-end prototype. Account details, posts, and chats are held in memory and reset when the app restarts. Media previews load from public image URLs; real authentication, uploads, and video playback need a backend and media service.
+
+## Run locally
+
+Install the Flutter SDK, then from the repository root run:
+
+```sh
+flutter create .
+flutter pub get
+flutter run
+```
