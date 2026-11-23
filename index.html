@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shashi's 5 Star Thattukada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">S</span>
+          <div>
+            <p>SHASHI'S</p>
+            <h1>5 Star Thattukada</h1>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="stat-icon coin">₹</span><strong id="coins">0</strong></div>
+          <div class="stat"><span class="stat-icon served">✓</span><strong id="served">0</strong></div>
+          <div class="stat time-stat"><span>DAY</span><strong id="timeLeft">90</strong></div>
+        </div>
+      </header>
+
+      <section class="game-board">
+        <aside class="customer-lane">
+          <div class="section-heading">
+            <span>CUSTOMERS</span>
+            <small id="queueCount">0 waiting</small>
+          </div>
+          <div id="customers" class="customers"></div>
+        </aside>
+
+        <section class="prep-area">
+          <div class="prep-header">
+            <div class="section-heading">
+              <span>PREP COUNTER</span>
+              <small id="prepHint">Select a menu item</small>
+            </div>
+            <button id="clearTray" class="clear-button" type="button">Clear tray</button>
+          </div>
+          <div class="counter">
+            <div class="shelf">
+              <div class="jars"><span class="jar chai"></span><span class="jar spice"></span><span class="jar sugar"></span></div>
+              <div class="plant">☘</div>
+            </div>
+            <div class="stove"><div class="pan"><span class="steam">〰</span></div><div class="flame">● ●</div></div>
+            <div id="tray" class="tray" aria-live="polite"><span class="tray-empty">Your tray is empty</span></div>
+          </div>
+          <div class="tray-actions">
+            <div id="trayTotal" class="tray-total">TOTAL <strong>₹0</strong></div>
+            <button id="serveButton" class="serve-button" type="button" disabled>Serve order <span>→</span></button>
+          </div>
+        </section>
+
+        <aside class="menu-panel">
+          <div class="menu-tabs" id="menuTabs">
+            <button class="active" type="button" data-category="beverages">Drinks</button>
+            <button type="button" data-category="snacks">Snacks</button>
+            <button type="button" data-category="meals">Meals</button>
+          </div>
+          <div id="menuGrid" class="menu-grid"></div>
+        </aside>
+      </section>
+    </main>
+
+    <div id="modifierModal" class="modal" aria-hidden="true">
+      <div class="modal-card">
+        <button id="closeModal" class="modal-close" type="button" aria-label="Close">×</button>
+        <div id="modifierIcon" class="modifier-icon">☕</div>
+        <h2 id="modifierTitle">Prepare drink</h2>
+        <div class="modifier-section">
+          <label>MILK</label>
+          <div class="choice-row" id="milkChoices">
+            <button type="button" data-value="milk" class="selected">With milk</button>
+            <button type="button" data-value="no-milk">No milk</button>
+          </div>
+        </div>
+        <div class="modifier-section">
+          <label>SUGAR</label>
+          <div class="choice-row" id="sugarChoices">
+            <button type="button" data-value="sugar" class="selected">Sugar</button>
+            <button type="button" data-value="no-sugar">No sugar</button>
+          </div>
+        </div>
+        <button id="addDrink" class="add-button" type="button">Add to tray</button>
+      </div>
+    </div>
+
+    <div id="startScreen" class="start-screen">
+      <div class="start-card">
+        <div class="start-badge">NOW OPEN</div>
+        <div class="start-icon">☕</div>
+        <p class="eyebrow">WELCOME TO</p>
+        <h2>Shashi's 5 Star<br />Thattukada</h2>
+        <p class="start-copy">Keep the queue moving. Match every order and earn tips!</p>
+        <button id="startButton" type="button">Open the thattukada <span>→</span></button>
+      </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
