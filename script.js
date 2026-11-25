@@ -73,18 +73,23 @@ function orderLabel(orderItem){
 function renderCustomers(){
   customersEl.innerHTML="";
   customers.forEach((customer)=>{
-    const card=document.createElement("button");
-    card.type="button";
-    card.className=`customer-card ${customer.selected?"selected":""} ${customer.patience<35?"danger":""}`;
-    card.innerHTML=`
-      <div class="customer-top"><span class="avatar">${customer.avatar}</span><span class="customer-name">${customer.name}<small>Table 5</small></span></div>
-      <div class="customer-order">${customer.order.map((item)=>{
+    const figure=document.createElement("button");
+    figure.type="button";
+    figure.className=`customer-figure ${customer.selected?"selected":""} ${customer.patience<35?"danger":""}`;
+    figure.setAttribute("aria-label",`${customer.name} asks for ${customer.order.map(orderLabel).join(" and ")}`);
+    figure.innerHTML=`
+      <span class="order-bubble">
+        <span class="speech-name">${customer.name} asks for</span>
+        <span class="customer-order">${customer.order.map((item)=>{
         const matched=tray.some((trayItem)=>trayItem.key===item.key);
         return `<div class="order-item"><span>${orderLabel(item)}</span><span class="${matched?"matched":""}">${matched?"✓":""}</span></div>`;
-      }).join("")}</div>
-      <div class="patience"><span style="width:${customer.patience}%"></span></div>`;
-    card.addEventListener("click",()=>selectCustomer(customer.id));
-    customersEl.appendChild(card);
+      }).join("")}</span>
+        <span class="patience"><span style="width:${customer.patience}%"></span></span>
+      </span>
+      <span class="customer-person"><span class="avatar">${customer.avatar}</span><span class="customer-name">${customer.name}</span></span>
+      `;
+    figure.addEventListener("click",()=>selectCustomer(customer.id));
+    customersEl.appendChild(figure);
   });
   $("#levelIndicator").textContent=`LEVEL ${getCurrentRound()}`;
   $("#queueCount").textContent=`${customers.length} waiting`;
@@ -94,7 +99,7 @@ function selectCustomer(id){
   customers.forEach((customer)=>customer.selected=customer.id===id);
   selectedCustomer=customers.find((customer)=>customer.id===id)||null;
   renderCustomers();
-  $("#prepHint").textContent=selectedCustomer?`${selectedCustomer.name}'s order selected`:"Select a menu item";
+  $("#prepHint").textContent=selectedCustomer?`Taking ${selectedCustomer.name}'s order`:"Select a customer to take their order";
   updateServeButton();
 }
 

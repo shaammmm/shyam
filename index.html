@@ -27,34 +27,28 @@
       </header>
 
       <section class="game-board">
-        <aside class="customer-lane">
-          <div class="section-heading">
-            <span>CUSTOMERS</span>
-            <small><span id="levelIndicator" class="level-badge">LEVEL 1</span> · <span id="queueCount">0 waiting</span></small>
-          </div>
-          <div id="customers" class="customers"></div>
-        </aside>
-
         <section class="prep-area">
           <div class="prep-header">
             <div class="section-heading">
               <span>PREP COUNTER</span>
-              <small id="prepHint">Select a menu item</small>
+              <small><span id="levelIndicator" class="level-badge">LEVEL 1</span> · <span id="queueCount">0 waiting</span></small>
             </div>
             <button id="clearTray" class="clear-button" type="button">Clear tray</button>
           </div>
-          <div class="counter">
+          <div class="counter" aria-label="Customers waiting at the counter">
             <div class="shelf">
               <div class="jars"><span class="jar chai"></span><span class="jar spice"></span><span class="jar sugar"></span></div>
               <div class="plant">☘</div>
             </div>
             <div class="stove"><div class="pan"><span class="steam">〰</span></div><div class="flame">● ●</div></div>
+            <div id="customers" class="customers" aria-label="Customers asking for orders"></div>
             <div id="tray" class="tray" aria-live="polite"><span class="tray-empty">Your tray is empty</span></div>
           </div>
           <div class="tray-actions">
             <div id="trayTotal" class="tray-total">TOTAL <strong>₹0</strong></div>
             <button id="serveButton" class="serve-button" type="button" disabled>Serve order <span>→</span></button>
           </div>
+          <p id="prepHint" class="prep-hint">Select a customer to take their order</p>
         </section>
 
         <aside class="menu-panel">
