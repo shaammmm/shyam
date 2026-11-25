@@ -21,7 +21,8 @@ button{font:inherit;cursor:pointer}
 .customer-lane,.prep-area,.menu-panel{border-right:1px solid var(--line)}
 .customer-lane{padding:18px 14px;background:rgba(255,253,247,.68);overflow-y:auto}
 .section-heading{display:flex;align-items:baseline;justify-content:space-between;margin:0 4px 12px}
-.section-heading span{font:800 13px "Baloo 2";letter-spacing:1px}.section-heading small{color:#999185;font-size:10px}
+.section-heading>span{font:800 13px "Baloo 2";letter-spacing:1px}.section-heading small{color:#999185;font-size:10px}
+.section-heading small .level-badge{display:inline-block;padding:3px 7px;border-radius:999px;background:var(--green);color:white;font-size:10px;font-weight:800;letter-spacing:.7px;line-height:1.1}
 .customers{display:grid;gap:10px}
 .customer-card{position:relative;min-height:126px;padding:12px;border:1px solid #ddd4c4;border-radius:12px;background:var(--paper);box-shadow:0 3px 0 rgba(88,74,51,.05);transition:.2s;text-align:left;width:100%}
 .customer-card.selected{border:2px solid var(--green);box-shadow:0 5px 16px rgba(13,107,82,.12)}
@@ -33,7 +34,10 @@ button{font:inherit;cursor:pointer}
 .patience{height:5px;border-radius:5px;background:#ebe5d8;overflow:hidden}.patience span{display:block;height:100%;background:#66a67d;transition:width .25s linear}.customer-card.danger .patience span{background:#df6b50}
 .prep-area{display:grid;grid-template-rows:58px minmax(330px,1fr) 74px;background:#efeadf}
 .prep-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 8px}.prep-header .section-heading{margin:0;display:grid}
-.clear-button{border:0;background:transparent;color:#9a8f7b;font-size:11px;text-decoration:underline}
+.clear-button{padding:8px 12px;border:1px solid #812f12;border-radius:8px;background:#a63d16;color:white;font-size:12px;font-weight:800;box-shadow:0 3px 0 #812f12;transition:.15s}
+.clear-button:hover{background:#812f12}
+.clear-button:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.clear-button:active{transform:translateY(2px);box-shadow:0 1px 0 #812f12}
 .counter{margin:0 18px;position:relative;overflow:hidden;border:1px solid #d1c6b2;border-radius:16px;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),linear-gradient(90deg,#e3d4b8 1px,transparent 1px),linear-gradient(#e3d4b8 1px,transparent 1px),#f7f1df;background-size:auto,38px 38px,38px 38px,auto;box-shadow:inset 0 -75px 0 #bfc58a}
 .counter::after{content:"";position:absolute;left:0;right:0;bottom:0;height:76px;background:linear-gradient(90deg,#667b59 0 20%,#7f955f 20% 21%,#667b59 21% 79%,#7f955f 79% 80%,#667b59 80%);border-top:5px solid #f1e7cd}
 .shelf{position:absolute;left:14px;right:14px;top:18px;height:70px;border-bottom:6px solid #9a7652}.jars{position:absolute;bottom:7px;left:8px;display:flex;gap:8px}.jar{width:28px;height:36px;border:3px solid rgba(255,255,255,.8);border-radius:5px 5px 10px 10px}.jar.chai{background:#b96d3a}.jar.spice{background:#d7b04b}.jar.sugar{background:#ece0c2}.plant{position:absolute;right:10px;bottom:8px;color:#55784b;font-size:38px}

@@ -24,6 +24,10 @@ const MENU = {
   ]
 };
 
+const WRONG_ORDER_PENALTY=10;
+const ORDERS_PER_DIFFICULTY_LEVEL=3;
+const PATIENCE_REDUCTION_PER_LEVEL=10;
+const MIN_CUSTOMER_PATIENCE=50;
 const names=["Achu","Malavika","Sethu","Anju","Binu","Faisal","Meera","Pradeep"];
 const avatars=["👩🏽","👨🏽","👩🏻","👨🏻","👵🏽","👴🏽","🧕🏽","🧔🏽"];
 let customers=[],tray=[],coins=0,served=0,timeLeft=90;
@@ -35,6 +39,9 @@ const customersEl=$("#customers"),trayEl=$("#tray"),menuGrid=$("#menuGrid");
 function allMenuItems(){return Object.values(MENU).flat()}
 function findItem(id){return allMenuItems().find((item)=>item.id===id)}
 function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
+function formatRupees(amount){return new Intl.NumberFormat("en-IN").format(amount)}
+function formatTime(seconds){return `${String(Math.floor(seconds/60)).padStart(2,"0")}:${String(seconds%60).padStart(2,"0")}`}
+function getCurrentRound(){return Math.floor(served/ORDERS_PER_DIFFICULTY_LEVEL)+1}
 
 function makeOrder(){
   const beverage=randomFrom(MENU.beverages);
@@ -50,7 +57,9 @@ function makeOrder(){
 
 function createCustomer(){
   const index=Math.floor(Math.random()*names.length);
-  return {id:crypto.randomUUID(),name:names[index],avatar:avatars[index],order:makeOrder(),patience:100};
+  const difficultyLevel=getCurrentRound()-1;
+  const patience=Math.max(MIN_CUSTOMER_PATIENCE,100-difficultyLevel*PATIENCE_REDUCTION_PER_LEVEL);
+  return {id:crypto.randomUUID(),name:names[index],avatar:avatars[index],order:makeOrder(),patience};
 }
 
 function orderLabel(orderItem){
@@ -77,6 +86,7 @@ function renderCustomers(){
     card.addEventListener("click",()=>selectCustomer(customer.id));
     customersEl.appendChild(card);
   });
+  $("#levelIndicator").textContent=`LEVEL ${getCurrentRound()}`;
   $("#queueCount").textContent=`${customers.length} waiting`;
 }
 
@@ -93,7 +103,7 @@ function renderMenu(category="beverages"){
   MENU[category].forEach((item)=>{
     const button=document.createElement("button");
     button.type="button";button.className="menu-item";
-    button.innerHTML=`<span class="icon">${item.icon}</span><strong>${item.name}</strong><span class="price">₹${item.price}</span>`;
+    button.innerHTML=`<span class="icon">${item.icon}</span><strong>${item.name}</strong><span class="price">₹${formatRupees(item.price)}</span>`;
     button.addEventListener("click",()=>item.drink?openDrinkModal(item):addToTray(item));
     menuGrid.appendChild(button);
   });
@@ -121,7 +131,7 @@ function addToTray(item,modifier=null){
 function renderTray(){
   if(!tray.length) trayEl.innerHTML='<span class="tray-empty">Your tray is empty</span>';
   else trayEl.innerHTML=tray.map((item,index)=>`<div class="tray-item" title="${item.name}" data-index="${index}">${item.icon}<small>${item.name}</small></div>`).join("");
-  $("#trayTotal").innerHTML=`TOTAL <strong>₹${tray.reduce((sum,item)=>sum+item.price,0)}</strong>`;
+  $("#trayTotal").innerHTML=`TOTAL <strong>₹${formatRupees(tray.reduce((sum,item)=>sum+item.price,0))}</strong>`;
 }
 
 function updateServeButton(){$("#serveButton").disabled=!selectedCustomer||tray.length===0}
@@ -131,13 +141,18 @@ function serveOrder(){
   const needed=selectedCustomer.order.map((item)=>item.key);
   const prepared=tray.map((item)=>item.key);
   const exact=needed.length===prepared.length&&needed.every((key)=>prepared.includes(key));
-  if(!exact){showToast("This tray doesn't match the order");return}
+  if(!exact){
+    coins-=WRONG_ORDER_PENALTY;
+    $("#coins").textContent=formatRupees(coins);
+    showToast(`Wrong order! -₹${formatRupees(WRONG_ORDER_PENALTY)}`);
+    return;
+  }
 
   const tip=Math.round(selectedCustomer.patience/20);
   const total=tray.reduce((sum,item)=>sum+item.price,0)+tip;
   coins+=total;served++;
-  $("#coins").textContent=coins;$("#served").textContent=served;
-  showToast(`Perfect serve! +₹${total}`);
+  $("#coins").textContent=formatRupees(coins);$("#served").textContent=served;
+  showToast(`Perfect serve! +₹${formatRupees(total)}`);
   customers=customers.filter((customer)=>customer.id!==selectedCustomer.id);
   tray=[];selectedCustomer=null;
   renderTray();renderCustomers();updateServeButton();
@@ -153,12 +168,12 @@ function startGame(){
   coins=0;served=0;timeLeft=90;tray=[];
   customers=[createCustomer(),createCustomer(),createCustomer()];
   gameRunning=true;selectedCustomer=null;
-  $("#coins").textContent="0";$("#served").textContent="0";$("#timeLeft").textContent=timeLeft;
+  $("#coins").textContent="0";$("#served").textContent="0";$("#timeLeft").textContent=formatTime(timeLeft);
   $("#startScreen").classList.add("hidden");
   renderTray();renderCustomers();updateServeButton();
   clearInterval(timerId);
   timerId=setInterval(()=>{
-    timeLeft--;$("#timeLeft").textContent=timeLeft;
+    timeLeft--;$("#timeLeft").textContent=formatTime(timeLeft);
     customers.forEach((customer)=>customer.patience=Math.max(0,customer.patience-1.3));
     customers=customers.filter((customer)=>customer.patience>0);
     while(customers.length<3)customers.push(createCustomer());
@@ -169,9 +184,9 @@ function startGame(){
 
 function endGame(){
   gameRunning=false;clearInterval(timerId);
-  $(".start-badge").textContent="DAY COMPLETE";$(".start-icon").textContent="🏆";
-  $(".eyebrow").textContent="TODAY'S TAKINGS";
-  $(".start-card h2").innerHTML=`₹${coins}<br />${served} orders served`;
+  $(".start-badge").textContent="SHIFT COMPLETE";$(".start-icon").textContent="🏆";
+  $(".eyebrow").textContent="SHIFT EARNINGS";
+  $(".start-card h2").innerHTML=`₹${formatRupees(coins)}<br />${served} orders served`;
   $(".start-copy").textContent=served>=8?"Super! The customers left happy.":"A good shift. Open again and beat your score!";
   $("#startButton").innerHTML='Open for another shift <span>→</span>';
   $("#startScreen").classList.remove("hidden");
